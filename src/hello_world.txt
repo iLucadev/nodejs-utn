@@ -2,4 +2,6 @@ Greeting server
 
 Available API routes:
 
-1. POST: /hello
+1. GET: /
+2. GET: /read-docs
+3. GET: /greetings

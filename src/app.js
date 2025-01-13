@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import morgan from "morgan";
 import helmet from "helmet";
+import fs from "fs";
 import pkg from "../package.json" assert { type: "json" };
 
 // Initialize app
@@ -18,7 +19,7 @@ app.get("/", (req, res) => {
   });
 });
 
-app.post("/read-docs", (req, res) => {
+app.get("/read-docs", (req, res) => {
   const filePath = "./src/hello_world.txt";
   fs.readFile(filePath, { encoding: "utf-8" }, (err, data) => {
     if (err) {
@@ -29,7 +30,7 @@ app.post("/read-docs", (req, res) => {
   });
 });
 
-app.post("/greetings", (req, res) => {
+app.get("/greetings", (req, res) => {
   res.send("Hello world!");
 });
 
