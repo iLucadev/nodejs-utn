@@ -1,0 +1,5 @@
+Greeting server
+
+Available API routes:
+
+1. POST: /hello
