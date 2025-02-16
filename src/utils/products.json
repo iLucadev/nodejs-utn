@@ -1,0 +1,23 @@
+[
+  {
+    "id": 1,
+    "name": "Coca-Cola 2.25L",
+    "price": 2800,
+    "cover": "https://acdn.mitiendanube.com/stores/798/865/products/195206782-a184200ebf78af6b4417031418538109-480-0.jpg",
+    "category": "Gaseosas"
+  },
+  {
+    "id": 2,
+    "name": "Pepsi 2L",
+    "price": 2200,
+    "cover": "https://acdn.mitiendanube.com/stores/001/219/229/products/40-51b4d2d07bc680935861f085d186fcdf1-ce8ed1c3777262d54916215172296748-480-0.jpg",
+    "category": "Gaseosas"
+  },
+  {
+    "id": 2,
+    "name": "Lay's 95g",
+    "price": 3400,
+    "cover": "https://jumboargentina.vtexassets.com/arquivos/ids/585021-800-600?v=637251096128970000&width=800&height=600&aspect=true",
+    "category": "Snacks"
+  }
+]

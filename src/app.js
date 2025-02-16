@@ -2,47 +2,42 @@ import express from "express";
 import cors from "cors";
 import morgan from "morgan";
 import helmet from "helmet";
-import fs from "fs";
-import pkg from "../package.json" assert { type: "json" };
+import { fileURLToPath } from "url";
+import path from "path";
+import expressLayouts from "express-ejs-layouts";
+
+import apiRoutes from "./routes/api/v1/index.js";
+
+import rateLimit from "express-rate-limit";
+
+const apiLimiter = rateLimit({
+  // 15 minutes
+  windowMs: 15 * 60 * 1000,
+  // IP limit
+  max: 100,
+  standardHeaders: true,
+  legacyHeaders: false,
+});
 
 // Initialize app
 const app = express();
 
-// Set base routes
-app.get("/", (req, res) => {
-  res.json({
-    message: "Welcome greetings app",
-    name: pkg.name,
-    version: pkg.version,
-    description: pkg.description,
-    author: pkg.author,
-  });
-});
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-app.get("/read-docs", (req, res) => {
-  const filePath = "./src/hello_world.txt";
-  fs.readFile(filePath, { encoding: "utf-8" }, (err, data) => {
-    if (err) {
-      res.status(500).send("Error reading the file");
-      return;
-    }
-    res.send(data);
-  });
-});
-
-app.get("/greetings", (req, res) => {
-  res.send("Hello world!");
-});
-
-// Middlewares
-app.use(
-  cors({
-    // origin: "http://localhost:3000",
-  })
-);
+// Main middlewares
 app.use(helmet());
 app.use(morgan("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(expressLayouts);
+app.use(cors());
+app.use("/api/", apiLimiter);
+app.use(express.static(path.join(__dirname, "public")));
+
+// Main routes
+app.use("/api/v1", apiRoutes);
+
+// Static files
+app.use("/assets", express.static(path.join(__dirname, "../public/assets")));
 
 export default app;
