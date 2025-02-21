@@ -1,48 +1,43 @@
-import fs from "fs";
+import { asyncHandler } from '../utils/async-handler.js';
+import * as productService from '../services/products.service.js';
 
-export const getProducts = async (req, res) => {
-  try {
-    fs.readFile("products.json", function (error, data) {
-      if (error) throw error;
+export const getProducts = asyncHandler(async (req, res) => {
+  const products = await productService.getAllProducts(req.query);
+  res.status(200).json({
+    status: 'success',
+    results: products.length,
+    data: { products },
+  });
+});
 
-      const products = JSON.parse(data);
+export const getProduct = asyncHandler(async (req, res) => {
+  const product = await productService.getProductById(req.params.id);
+  res.status(200).json({
+    status: 'success',
+    data: { product },
+  });
+});
 
-      return res.status(200).render("products", { products });
-    });
-  } catch (error) {
-    return res.status(500).json({
-      status: "Internal Server Error",
-      code: 500,
-      message: "An error has ocurred while getting products",
-    });
-  }
-};
+export const createProduct = asyncHandler(async (req, res) => {
+  const newProduct = await productService.createProduct(req.body);
+  res.status(201).json({
+    status: 'success',
+    data: { product: newProduct },
+  });
+});
 
-export const getProductDetails = async (req, res) => {
-  const { id } = req.params;
-  try {
-    fs.readFile("products.json", function (error, data) {
-      if (error) throw error;
+export const updateProduct = asyncHandler(async (req, res) => {
+  const updatedProduct = await productService.updateProduct(req.params.id, req.body);
+  res.status(200).json({
+    status: 'success',
+    data: { product: updatedProduct },
+  });
+});
 
-      const product = JSON.parse(data.find((el) => el.id == id));
-
-      return res.status(200).json({
-        status: "OK",
-        code: 200,
-        result: product,
-      });
-    });
-  } catch (error) {
-    return res.status(500).json({
-      status: "Internal Server Error",
-      code: 500,
-      message: "An error has ocurred while getting product",
-    });
-  }
-};
-
-export const createProduct = async (req, res) => {};
-
-export const deleteProduct = async (req, res) => {};
-
-export const updateProduct = async (req, res) => {};
+export const deleteProduct = asyncHandler(async (req, res) => {
+  await productService.deleteProduct(req.params.id);
+  res.status(204).json({
+    status: 'success',
+    data: null,
+  });
+});
